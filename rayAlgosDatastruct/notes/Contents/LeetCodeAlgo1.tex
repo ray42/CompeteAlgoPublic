@@ -1,0 +1,207 @@
+\chapter[Leetcode Algorithms P1-P100]
+{Leetcode Algorithms P1-P100
+  \label{chLCP1P100}}
+\chaptermark{LC P1-P100}
+
+
+
+\section{11: Container With Most Water\label{secLCP11CntnrWthMstWtr}}
+
+Given n non-negative integers $a_1$, $a_2$, $\ldots$, $a_n$, where each
+represents a point at coordinate $(i,a_i)$. $n$ vertical lines are drawn
+such that the two endpoints of line $i$ is at $(i,a_i)$ and $(i,0)$. Find
+two lines, which together with $x$-axis forms a container, such that the
+container contains the most water.
+
+Note: You may not slant the container and $n$ is at least $2$.
+
+\rrsepline{}
+
+\rrheader{Approach \#1 Brute Force [Time Limit Exceeded]}
+
+\noindent{}\textbf{Algorithm}\\
+In this case, we will simply consider the area for every possible pair of
+the lines and find out the maximum area out of those.
+\begin{lstlisting}[style=raycppnewsnippet]
+public class Solution {
+  public int maxArea(int[] height) 
+  {
+    int maxarea = 0;
+    for (int i = 0; i < height.length; i++)
+      for (int j = i + 1; j < height.length; j++)
+        maxarea = Math.max(maxarea, Math.min(height[i],
+                                             height[j]) * (j - i));
+    
+    return maxarea;
+  }
+}
+\end{lstlisting}
+
+\noindent{}\textbf{Complexity Analysis}\\
+\begin{itemize}%[noitemsep,topsep=0pt]
+\item Time complexity: $\comBigOh{n^2}$. Calculating areas for all
+  $\displaystyle \frac{n(n-1)}{2}$ height pairs.
+\item Space complexity: $\comBigOh{1}$. Constant extra space used.
+\end{itemize}
+
+Note that we only have to consider $\frac{n(n-1)}{2}$ pairs (to calculate
+the areas), since once we've calculated the area for $i$ with $j$, the area
+for $j$ with $i$ is the same.  That is, they are symmetric.
+
+\rrheader{Approach \#2 (Two Pointer Approach) [Accepted]}
+
+\noindent{}\textbf{Algorithm}\\
+The intuition behind this approach is that the area formed between the lines
+will always be limited by the height of the shorter line. Further, the
+farther the lines, the more will be the area obtained.
+
+We take two pointers, one at the beginning and one at the end of the array
+constituting the length of the lines. Further, we maintain a variable
+\ctt{maxarea} to store the maximum area obtained till now. At every step, we
+find out the area formed between them, update \ctt{maxarea} and move the
+pointer pointing to the \textbf{shorter line} towards the other end by one
+step.
+
+The algorithm can be better understood by looking at the example below:
+\begin{lstlisting}[style=raygeneric]
+1 8 6 2 5 4 8 3 7
+\end{lstlisting}
+
+See the gif here: https://leetcode.com/problems/container-with-most-water/solution/
+
+How this approach works?
+
+Initially we consider the area constituting the exterior most lines. Now, to
+maximize the area, we need to consider the area between the lines of larger
+lengths. 
+
+\textbf{If we try to move the pointer at the longer line inwards, we won't
+gain any increase in area, since it is limited by the shorter line.}
+\rrblue{(Think about it, since moving the longer line will reduce the length
+  of the base, but the height is still limited by the shorter line.)}
+
+\textbf{But moving the shorter line's pointer could turn out to be
+  beneficial, as per the same argument, despite the reduction in the width.}
+\rrblue{(Since we may read a line where the height more than offset the
+  reduction in width.)} \emph{This is done since a relatively longer line
+  obtained by moving the shorter line's pointer might overcome the reduction
+  in area caused by the width reduction.}
+
+For further clarification click
+here\footnote{https://discuss.leetcode.com/topic/3462/yet-another-way-to-see-what-happens-in-the-o-n-algorithm}
+and for the proof click here\footnote{https://discuss.leetcode.com/topic/503/anyone-who-has-a-o-n-algorithm/2}.
+
+I shall cover both now.
+
+\rrsepline{}
+
+The $\comBigOh{n}$ solution with proof by contradiction doesn't look
+intuitive enough to me. Before moving on, read the algorithm first if you
+don't know it yet.
+
+Here's another way to see what happens in a matrix representation:
+
+Draw a matrix where the row is the first line, and the column is the second
+line. For example, say $n=6$.
+
+In the figures below, $x$ means we don't need to compute the volume for that
+case: \textbf{(1)} On the diagonal, the two lines are overlapped;
+\textbf{(2)} The lower left triangle area of the matrix is symmetric to the
+upper right area.
+
+We start by computing the volume at $(1,6)$, denoted by $o$. Now, if the
+left line is shorter than the right line, then all the elements left to
+$(1,6)$ on the first row have smaller volume \rrblue{(because in those, we
+  keep the shorter one still $(i=1)$ but we move the longer one $(j=6)$,
+  thus reducing the width)}, so we don't need to compute those cases
+(crossed by $-{}-{}-$).
+\begin{lstlisting}[style=raygeneric]
+  1 2 3 4 5 6
+1 x ------- o
+2 x x
+3 x x x 
+4 x x x x
+5 x x x x x
+6 x x x x x x
+\end{lstlisting}
+Next we move the left line and compute $(2,6)$. Now if the right line is
+shorter, all cases below $(2,6)$ are eliminated. \rrblue{(If the right line
+  is shorter, then the same principal applies, there's no point moving the
+  left line $i=2$ towards $j=6$, because we just reduce the width without
+  being able to increase the max length of the two lines)}
+\begin{lstlisting}[style=raygeneric]
+  1 2 3 4 5 6
+1 x ------- o
+2 x x       o
+3 x x x     |
+4 x x x x   |
+5 x x x x x |
+6 x x x x x x
+\end{lstlisting}
+And no matter how this $o$ path goes, we end up only need to find the max
+value on this path, which contains $n-1$ cases.
+\begin{lstlisting}[style=raygeneric]
+  1 2 3 4 5 6
+1 x ------- o
+2 x x - o o o
+3 x x x o | |
+4 x x x x | |
+5 x x x x x |
+6 x x x x x x
+\end{lstlisting}
+Hope this helps. I feel more comfortable seeing things this way.
+
+Let's code this up.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

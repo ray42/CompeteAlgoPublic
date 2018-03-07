@@ -1,0 +1,9 @@
+
+Go back to do #3 with sliding window, cos it's interesting.
+
+https://leetcode.com/problemset/all/
+
+pass: usual
+
+Duncan's: https://leetcode.com/slamduncan/
+

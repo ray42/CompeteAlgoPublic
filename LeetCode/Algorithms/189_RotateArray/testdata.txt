@@ -1,0 +1,49 @@
+Start: 
+>nums:0 1 2 3 4 5 6 
+>first:0
+>middle:2
+>last:7
+>next:2
+
+>nums:2 1 0 3 4 5 6 
+>first:1
+>middle:2
+>last:7
+>next:3
+
+RRRELSE IF first==middle, set middle=next
+>nums:2 3 0 1 4 5 6 
+>first:2
+>middle:4
+>last:7
+>next:4
+
+>nums:2 3 4 1 0 5 6 
+>first:3
+>middle:4
+>last:7
+>next:5
+
+RRRELSE IF first==middle, set middle=next
+>nums:2 3 4 5 0 1 6 
+>first:4
+>middle:6
+>last:7
+>next:6
+
+RRRIF next==last, set next=middle
+>nums:2 3 4 5 6 1 0 
+>first:5
+>middle:6
+>last:7
+>next:6
+
+RRRIF next==last, set next=middle
+>nums:2 3 4 5 6 0 1 
+>first:6
+>middle:6
+>last:7
+>next:6
+
+v1AFTER:2 3 4 5 6 0 1 
+
