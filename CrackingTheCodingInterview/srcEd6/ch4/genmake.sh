@@ -14,7 +14,7 @@ CC=""
 CFLAGS=""
 LDFLAGS=""
 
-source ./../GCCFLAGS
+source ./../GCCFLAGS.ray
 
 echo "CC = ${CC}" >> ${MFILE}
 echo "CFLAGS = ${CFLAGS}" >> ${MFILE}
