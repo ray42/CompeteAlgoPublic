@@ -18,9 +18,9 @@ alphabetical order):
 * [IntroductionToAlgorithms](https://github.com/raymonwhite42/CompeteAlgoPublic/tree/master/IntroductionToAlgorithms): Introduction to Algorithms, 3rd Ed. (CLRS),  [Amazon link](https://www.amazon.com/Introduction-Algorithms-3rd-MIT-Press/dp/0262033844)
 
 My solutions to various coding sites (in alphabetical order):
-* [Codechef](https://github.com/raymonwhite42/CompeteAlgoPublic/tree/master/CodeChef "Codechef"): Website: https://www.codechef.com
+* [CodeChef](https://github.com/raymonwhite42/CompeteAlgoPublic/tree/master/CodeChef "Codechef"): Website: https://www.codechef.com
 * [LeetCode](https://github.com/raymonwhite42/CompeteAlgoPublic/tree/master/LeetCode "LeetCode"): Website: https://leetcode.com
-* [Hackerrank](https://github.com/raymonwhite42/CompeteAlgoPublic/tree/master/HackerRank "Hackerrank"): Website: https://www.hackerrank.com
+* [HackerRank](https://github.com/raymonwhite42/CompeteAlgoPublic/tree/master/HackerRank "Hackerrank"): Website: https://www.hackerrank.com
 
 My own codes on algorithms and data structures:
 * [rayAlgosDatastruct](https://github.com/raymonwhite42/CompeteAlgoPublic/tree/master/rayAlgosDatastruct "rayAlgosDatastruct"): Website: https://ray42.com 
