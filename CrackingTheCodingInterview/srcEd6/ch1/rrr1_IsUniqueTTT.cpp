@@ -16,15 +16,34 @@ using std::cout; using std::endl;
 static bool RAYDEBUG=false;
 #define RDEBUG(x) cout << '>' << #x << ':' << x << '\n';
 
+#include<unordered_set>
+#include<algorithm>
+#include<string>
+#include<cstddef>
+
 // 1.1 Is Unique: Implement an algorithm to determine if a string has all 
 // unique characters. What if you cannot use additional data structures?
-
-bool is_unique_hashtable(const std::string& s)
+bool is_unique_hashtable(const std::string& str)
 {
+  std::unordered_set<char> uset;
+  for(const auto& s:str)
+  {
+    auto p = uset.insert(s);
+    if(!p.second)
+      return false;
+  }
+  return true;
 }
 
-bool is_unique_vector(std::string& s)
+bool is_unique_vector(std::string& str)
 {
+  std::sort(str.begin(),str.end());
+  for(size_t i = 1; i < str.size(); ++i)
+  {
+    if(str[i-1]==str[i])
+      return false;
+  }
+  return true;
 }
 
 TEST_CASE("Testing ", "[]" )
@@ -46,8 +65,6 @@ TEST_CASE("Testing ", "[]" )
   }
 
 }
-
-
 
 //auto main()->int
 //{
