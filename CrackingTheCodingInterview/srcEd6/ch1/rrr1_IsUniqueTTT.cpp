@@ -33,6 +33,10 @@ bool is_unique_hashtable(const std::string& str)
       return false;
   }
   return true;
+
+  // Can also do: - but this will insert EVERY element.
+  //unordered_set<char> sset(s.begin(),s.end());
+  //return sset.size()==s.size();
 }
 
 bool is_unique_vector(std::string& str)

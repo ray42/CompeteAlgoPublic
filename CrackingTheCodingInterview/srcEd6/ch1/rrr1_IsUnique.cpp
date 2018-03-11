@@ -1,6 +1,6 @@
 /*
  * =========================================================================
- * Copyright (c) 2017, Raymon White - All Rights Reserved
+ * Copyright (c) 2018, Raymon White - All Rights Reserved
  * Author:  Raymon White (ray), rayaxiom42 AT gmail DOT com
  * =========================================================================
  */
@@ -8,7 +8,6 @@
 #define CATCH_CONFIG_MAIN  
 #include "./../catch.hpp"
 
-//web
 #include<iostream>
 using std::cout; using std::endl;
 
@@ -17,33 +16,39 @@ using std::cout; using std::endl;
 static bool RAYDEBUG=false;
 #define RDEBUG(x) cout << '>' << #x << ':' << x << '\n';
 
-
-#include<string>
-using std::string;
 #include<unordered_set>
-using std::unordered_set;
-#include<vector>
-using std::vector;
-#include<algorithm> // sort
+#include<algorithm>
+#include<string>
+#include<cstddef>
 
-bool is_unique_hashtable(const string& s)
+// 1.1 Is Unique: Implement an algorithm to determine if a string has all 
+// unique characters. What if you cannot use additional data structures?
+bool is_unique_hashtable(const std::string& str)
 {
-  unordered_set<char> sset(s.begin(),s.end());
-  return sset.size()==s.size();
+  std::unordered_set<char> uset;
+  for(const auto& s:str)
+  {
+    auto p = uset.insert(s);
+    if(!p.second)
+      return false;
+  }
+  return true;
+
+  // Can also do: - but this will insert EVERY element.
+  //unordered_set<char> sset(s.begin(),s.end());
+  //return sset.size()==s.size();
 }
 
-// No extra space used, treating s as a vector.
-bool is_unique_vector(string& s)
+bool is_unique_vector(std::string& str)
 {
-  std::sort(s.begin(),s.end());
-  for(int i  = 1; i < s.size(); ++i)
+  std::sort(str.begin(),str.end());
+  for(size_t i = 1; i < str.size(); ++i)
   {
-    if(s[i-1]==s[i])
+    if(str[i-1]==str[i])
       return false;
   }
   return true;
 }
-
 
 TEST_CASE("Testing ", "[]" )
 {
@@ -55,9 +60,9 @@ TEST_CASE("Testing ", "[]" )
   }
   SECTION("Sec Testing ")
   {
-    string s1{"qwer"}; 
-    string s2{""}; 
-    string s3{"qq"}; 
+    std::string s1{"qwer"}; 
+    std::string s2{""}; 
+    std::string s3{"qq"}; 
     REQUIRE(is_unique_vector(s1)==true);
     REQUIRE(is_unique_vector(s2)==true);
     REQUIRE(is_unique_vector(s3)==false);
@@ -65,22 +70,8 @@ TEST_CASE("Testing ", "[]" )
 
 }
 
-//auto main(int argc, char* argv[])->int
+//auto main()->int
 //{
 //  return 0;
 //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
