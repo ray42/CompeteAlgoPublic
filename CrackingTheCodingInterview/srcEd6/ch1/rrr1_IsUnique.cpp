@@ -39,10 +39,31 @@ bool is_unique_hashtable(const std::string& str)
   //return sset.size()==s.size();
 }
 
+// Assume ASCII, 0-128 chars. But confirm with interviewer
+bool is_unique_bool(std::string const & str)
+{
+  constexpr std::size_t charset_size = 128;
+
+  if(str.size() > charset_size) return false;
+
+  std::array<bool,charset_size> char_set{}; // zero initialized to false
+
+  for(std::size_t i = 0; i < str.size(); ++i)
+  {
+    int val = str[i];
+    if(char_set[val])
+      return false;
+    char_set[val] = true;
+  }
+  
+  return true;
+}
+
+// inplace
 bool is_unique_vector(std::string& str)
 {
   std::sort(str.begin(),str.end());
-  for(size_t i = 1; i < str.size(); ++i)
+  for(std::size_t i = 1; i < str.size(); ++i)
   {
     if(str[i-1]==str[i])
       return false;
@@ -57,6 +78,12 @@ TEST_CASE("Testing ", "[]" )
     REQUIRE(is_unique_hashtable("qwer")==true);
     REQUIRE(is_unique_hashtable("")==true);
     REQUIRE(is_unique_hashtable("qq")==false);
+  }
+  SECTION("Sec Testing ")
+  {
+    REQUIRE(is_unique_bool("qwer")==true);
+    REQUIRE(is_unique_bool("")==true);
+    REQUIRE(is_unique_bool("qq")==false);
   }
   SECTION("Sec Testing ")
   {
