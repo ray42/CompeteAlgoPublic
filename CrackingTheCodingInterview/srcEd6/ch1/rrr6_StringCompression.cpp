@@ -78,17 +78,3 @@ TEST_CASE("Testing strCompress", "[strCompress]" )
 //  return 0;
 //}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
