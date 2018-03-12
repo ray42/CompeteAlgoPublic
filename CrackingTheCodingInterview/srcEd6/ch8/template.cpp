@@ -46,7 +46,7 @@ TEST_CASE("Testing ", "[]" )
   }
 }
 
-//auto main()->int
+//auto main(int argc, char * argv[])->int
 //{
 //  return 0;
 //}
