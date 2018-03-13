@@ -42,7 +42,6 @@ static bool RAYDEBUG=false;
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // #include here
-#include<string>
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -50,57 +49,6 @@ static bool RAYDEBUG=false;
 // Implementation here
 std::string compressStr(std::string str)
 {
-  // Check for empty string and string of 1 char, since any compression 
-  // cannot be shorter than this.
-  if(str.size() == 0 || str.size() == 1) 
-    return str;
-
-  // There is at least two characters. So initialize an empty string, and 
-  // a count of the consecutive characters.
-  std::string ret{};
-  int consecCount = 0;
-
-  // Now, since we have to compare str[i] against str[i+1], 
-  // where i=0..str.size()-1, we need a way to end the comparison. The best
-  // way I can think of doing this is to use a sentinel. I shall use "$".
-  str+="$";
-
-  // index into the container, starting at 0.
-  int index = 0;
-
-  // character to compare against, initialized to the first char in str.
-  char char_to_compare = str[0];
-
-  // Loop from p=0..str.size()-1
-  while(index < static_cast<int>(str.size()))
-  {
-    // If this is the same a char_to_compare, we simply increment both the
-    // count and index.
-    if(str[index]==char_to_compare)
-    {
-      ++index;
-      ++consecCount;
-    }
-    // If we get one which is not the same, this means we can add
-    // char_to_compare to the result along with the count.
-    else
-    {
-      ret+=char_to_compare+std::to_string(consecCount);
-
-      // Now reset the count and set the new char_to_compare
-      consecCount = 0;
-      char_to_compare = str[index];
-
-      // Do not increment the index, since we need to count the new char at
-      // this index.
-    }
-  }
-
-  // Note that we never actually put the sentinel in the ret string, but we
-  // have put it in the input str, so we need to get rid of it.
-  str.pop_back();
-   
-  return str.size() < ret.size() ? str : ret;
 }
 
 ////////////////////////////////////////////////////////////////////////////
