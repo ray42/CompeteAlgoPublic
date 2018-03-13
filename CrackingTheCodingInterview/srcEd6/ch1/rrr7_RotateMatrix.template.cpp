@@ -64,47 +64,6 @@ void printMat(const Matrix<int>& mat)
 
 void rotateRight(Matrix<int>& mat)
 {
-  // If the matrix is empty or nonsquare, return right away.
-  if(mat.size() == 0 || mat[0].size() != mat.size())
-    return ;
-
-  // If the matrix has a single element, again return right away.
-  if(mat.size()==1)
-    return ;
-
-  // Matrix size
-  int n = static_cast<int>(mat.size());
-  int nlayers = n/2;
-
-  // Loop through the layers
-  for(int layer = 0; layer < nlayers; ++layer)
-  {
-    // The items per layer to rotate (on a single row)
-    int first = layer;
-    int last = n - layer - 1;
-    // ^ there are n-1 items to move in the first layer, which decreases by
-    // one as we go through the layers
-
-    // Now loop through the elements.
-    for(int i = first; i < last; ++i)
-    {
-      int offset = i-first;
-
-      int top = mat[first][i]; // save top
-
-      // left -> top
-      mat[first][i] = mat[last-offset][first];
-
-      // bottom->left
-      mat[last-offset][first] = mat[last][last-offset];
-
-      // right->bottom
-      mat[last][last-offset] = mat[i][last];
-
-      // top->right
-      mat[i][last] = top; // right <- saved top
-    }
-  }
 }
 // The key to the above algorithm is to work out the positions of 
 // top/left/bottom and right.
