@@ -68,7 +68,7 @@ std::vector<int> convertSinglyLinkedListToVec(ListNode* n)
   return ret;
 }
 
-void printListNode(ListNode* n, const string& str="")
+void printListNode(ListNode* n, const std::string& str="")
 {
   if(!str.empty())
   {
@@ -208,7 +208,7 @@ template<typename T>
 class GenNode{
 public:
   GenNode(T d=T{}, int nchild=0, const std::string& s=""):
-    data_{d},children_{vector<GenNode*>(nchild,nullptr)},name_{s}
+    data_{d},children_{std::vector<GenNode*>(nchild,nullptr)},name_{s}
   {
   }
 
