@@ -89,34 +89,6 @@ static bool RAYDEBUG=false;
 // This is two pass: https://leetcode.com/articles/remove-nth-node-end-list
 ListNode* getKthToLastKnownSize(ListNode* head, int k)
 {
-  // Set up a dummy head node.
-  std::unique_ptr<ListNode> dummy = std::make_unique<ListNode>(0);
-  dummy->next = head;
-
-  // Get the count of elements
-  int nelement = 0;
-  while(head)
-  {
-    ++nelement;        // increment element
-    head = head->next; // get next head
-  }
-
-  // Check if k is in range
-  if(!(1<=k && k<=nelement))
-    return nullptr;
-
-  // Now we have the number of elements, we can simply iterate through
-  // reset the head.
-  head = dummy->next;
-  // number of elements to get to
-  int kk = nelement-k; // This part is a bit tricky to get right
-  while(head && kk>0)
-  {
-    head = head->next;
-    --kk;
-  }
-
-  return head;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -128,37 +100,11 @@ ListNode* getKthToLastRecurHelper(ListNode* head, int k, int& i);
 
 ListNode* getKthToLastRecur(ListNode* head, int k)
 {
-  // This is a counter which starts counting up from the base case.
-  // Then, once i==k, we just return the node.
-  int i = 0;
-  return getKthToLastRecurHelper(head, k, i);
 }
 
 ListNode* getKthToLastRecurHelper(ListNode* head, int k, int& i)
 {
-  // Base case: if head == nullptr, return nullptr
-  if(head == nullptr)
-    return nullptr;
-
-  // Otherwise, we have not reached the nullptr, so we need going deeper.
-  ListNode* nd = getKthToLastRecurHelper(head->next,k,i);
-
-  // Now the value i would be incremented if head->next is a valid node.
-  // we increment it here to indicate that this is a valid node as well.
-  ++i;
-
-  // Check if this is the node we want.
-  if(i==k)
-  {
-    return head;
-  }
-
-  // Otherwise, we propagate the nullptr (since this is the only other 
-  // returned value) up.
-  return nd;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -167,33 +113,6 @@ ListNode* getKthToLastRecurHelper(ListNode* head, int k, int& i)
 // This is one pass: https://leetcode.com/articles/remove-nth-node-end-list
 ListNode* getKthToLastIter(ListNode* head, int k)
 {
-  // Check for null head.
-  if(head == nullptr) return head;
-
-  // If k is less than 1, it's out of bounds. We will check if it is more
-  // than n elements in a bit.
-  if(k < 1) return nullptr;
-
-  // Two pointers p1 and p2, k elements apart.
-  ListNode* p1 = head;
-  ListNode* p2 = head;
-
-  // Move p2 k nodes into the list, checking for out of bounds.
-  for(int i = 0; i < k; ++i)
-  {
-    if(p2 == nullptr) return nullptr; // out of bounds.
-    p2 = p2->next;
-  }
-
-  // Move them at the same pace. When p2 hits the end, p1 will be at the 
-  // right element.
-  while(p2 != nullptr)
-  {
-    p1 = p1->next;
-    p2 = p2->next;
-  }
-
-  return p1;
 }
 
 ////////////////////////////////////////////////////////////////////////////

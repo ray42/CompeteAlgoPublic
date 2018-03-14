@@ -43,14 +43,14 @@ struct ListNode{
 
 ListNode* buildSinglyLinkedList(const std::vector<int>& v)
 {
-  ListNode* dummy = new ListNode{0};
-  ListNode* head = dummy;
+  ListNode dummy = ListNode{0};
+  ListNode* head = &dummy;
   for(const auto& val:v)
   {
     head->next = new ListNode{val};
     head = head->next;
   }
-  return dummy->next;
+  return dummy.next;
 }
 
 std::vector<int> convertSinglyLinkedListToVec(ListNode* n)
