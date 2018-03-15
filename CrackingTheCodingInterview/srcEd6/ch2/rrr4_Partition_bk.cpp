@@ -63,9 +63,6 @@ ListNode* partition(ListNode* n, int x)
   return left_dummy->next;
 }
 
-
-
-
 TEST_CASE("Testing ", "[]" )
 {
   SECTION("Sec Testing ")

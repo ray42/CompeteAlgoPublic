@@ -21,21 +21,16 @@ static bool RAYDEBUG=false;
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // Question here.
-// 2.3: Delete Middle Node: Implement an algorithm to delete a node in the 
-//      middle (i.e., any node but the first and last node, not necessarily 
-//      the exact middle) of a singly linked list, given only access to that
-//      node.
+// 2.4: Partition: Write code to partition a linked list around a value x,
+//      such that all nodes less than $x$ come before all nodes greater than
+//      or equal to $x$. If $x$ is contained within the list, the values of 
+//      x only need to be after the elements less than x (see below). The 
+//      partition element x can appear anywhere in the ``right partition'';
+//      it does not need to appear between the left and right partitions.
 //
-// EXAMPLE:
-// Input: the node c from the linked list a->b->c->d->e->f.
-// Result: nothing is returned, but the new linked list looks like
-//         a->b->d->e->f
-//
-// Hints:
-//
-// #72: Picture the list 1->5->9->12. Removing 9 would make it look like 
-//      1->5->12. You only have access to the 9 node. Can you make it look 
-//      like the correct answer?
+// EXAMPLE:}
+//Input: 3->5->8-> 5 ->10->2->1 [partition = 5]
+//Output:3->1->2->10->5 ->5->8
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -60,36 +55,8 @@ static bool RAYDEBUG=false;
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // Implementation here
-// The return value is if we can delete it or not.
-bool deleteNode(ListNode* mid)
+ListNode* partition(ListNode* head, int x)
 {
-  if(mid == nullptr)
-  {
-    return false; // failure
-  }
-
-  // We also need the next node to be valid to copy over the value. If it's
-  // not available, we cannot set this to null, since we need access to the
-  // previous node.
-  if(mid->next == nullptr)
-  {
-    return false;
-  }
-
-  // get the next node in a tmp variable (so we can delete it)
-  ListNode* tmp = mid->next;
-
-  // Copy over the value
-  mid->data = tmp->data;
-
-  // relink
-  mid->next = tmp->next;
-
-  // delete tmp
-  delete tmp; tmp = nullptr;
-
-  // success
-  return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////
