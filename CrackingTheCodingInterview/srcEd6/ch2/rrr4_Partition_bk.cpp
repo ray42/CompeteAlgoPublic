@@ -73,24 +73,6 @@ TEST_CASE("Testing ", "[]" )
     ListNode* res0 = partition(n0,5);
     REQUIRE(convertSinglyLinkedListToVec(res0)==sol0);
     }
-//    {
-//    ListNode* n0 = buildSinglyLinkedList({0,1,1,2,1,3,4,3,3,5,6});
-//    vector<int> sol0{0,1,2,3,4,5,6};
-//    ListNode* res0 = removeDups(n0);
-//    REQUIRE(convertSinglyLinkedListToVec(res0)==sol0);
-//    }
-//    {
-//    ListNode* n0 = buildSinglyLinkedList({0});
-//    vector<int> sol0{0};
-//    ListNode* res0 = removeDups(n0);
-//    REQUIRE(convertSinglyLinkedListToVec(res0)==sol0);
-//    }
-//    {
-//    ListNode* n0 = buildSinglyLinkedList({});
-//    vector<int> sol0{};
-//    ListNode* res0 = removeDups(n0);
-//    REQUIRE(convertSinglyLinkedListToVec(res0)==sol0);
-//    }
   }
 }
 
@@ -98,18 +80,3 @@ TEST_CASE("Testing ", "[]" )
 //{
 //  return 0;
 //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
