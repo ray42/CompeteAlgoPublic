@@ -59,50 +59,6 @@ static bool RAYDEBUG=false;
 // elements >= x. Then afterwards, we concatenate the two linked lists.
 ListNode* partition(ListNode* head, int x)
 {
-  // check for nullptr
-  if(head == nullptr) return head;
-
-  // I will have two dummy head, this will be used to connect the two lists
-  // at the end.
-  ListNode* left_dummy = new ListNode{0};
-  ListNode* right_dummy = new ListNode{0};
-
-  // We need two more pointers which does the actual work, pointing to the
-  // current node in the two linked lists. We point it to the dummy nodes
-  // initially, since we need to add to them, which means to modify the next
-  // pointer of the previous node.
-  ListNode* left_node = left_dummy;   // used for return
-  ListNode* right_node = right_dummy; // used for attaching 
-
-  // Now loop through the nodes of head, if it's less than x, attach it
-  // to left_node, if it's equal to or greater than head, attach it to 
-  // right_node. Remember to null the next pointer of right_node after the
-  // loop, since it may point to a node in left_node.
-  while(head)
-  {
-    if(head->data < x)
-    {
-      left_node->next = head;
-      left_node = left_node->next;
-    }
-    else
-    {
-      right_node->next = head;
-      right_node = right_node->next;
-    }
-    // increment the head.
-    head = head->next;
-  }
-
-  // Now null the right_head->next to end the linked list.
-  right_node->next = nullptr;
-
-  // join the two linked lists, this involves attaching the 
-  // left_node->next=right_dummy->next;
-  left_node->next = right_dummy->next;
-
-  // Now we need to return the left head, which is in left_dummy->next;
-  return left_dummy->next;
 }
 
 // This is used to check the output of partition()
