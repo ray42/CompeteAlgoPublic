@@ -88,17 +88,6 @@ static bool RAYDEBUG=false;
 // NOTE: nullptr will be converted to 0.
 int list_to_int(ListNode* l)
 {
-  int res = 0;
-  int pow_ten = 1; // power of ten, starts with 10^0 = 1
-  while(l)
-  {
-    // Add to res
-    res+=l->data * pow_ten;
-    
-    l = l->next;  // advance l
-    pow_ten *= 10;// next power of 10
-  }
-  return res;
 }
 
 // Convert an int to singly linked list, in reverse order, that is, input 
@@ -106,43 +95,6 @@ int list_to_int(ListNode* l)
 // NOTE: 0 will be converted to a node with data 0, NOT a nullptr
 ListNode* int_to_list(int x)
 {
-  // The below algorithm will return a nullptr if x is 0, so let's handle
-  // this edge case.
-  if(x==0)
-    return new ListNode{0};
-
-  // Because the following algorithm repeatedly gets the lowest part (the 
-  // least significant part) of the number x, we extract the units first,
-  // then tens, then hundreds, etc...
-  //
-  // So we need to repeatedly add to the END of the linked list, so that 
-  // the units appear first. i.e. for 524, after two iterations, we have
-  // 4->2, and we need to be positioned at 2, to be able to attach 5 at the 
-  // end.
-  //
-  // This has the problem that we've lost the head, and we need this to
-  // return the ListNode*. Thus, we use a dummy head.
-  std::unique_ptr<ListNode> dummy_head = std::make_unique<ListNode>(0);
-  
-  // This is used to advance through the linked list
-  ListNode* node = dummy_head.get();
-
-  while(x)
-  {
-    // Get the least significant digit
-    int node_data = x%10;
-
-    // Create the new node and attach.
-    node->next = new ListNode{node_data};
-
-    // Advance node and move x one place to the right (divide by 10) to get
-    // rid of the least significant digit
-    node = node->next;
-    x /= 10;
-  }
-
-  // Now return from dummy pointer
-  return dummy_head->next;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -153,17 +105,6 @@ ListNode* int_to_list(int x)
 // =2->1->9   =912
 ListNode* sum_convert_int(ListNode* l1, ListNode* l2)
 {
-  // First check if they're both nullptr, if so, just return nullptr
-  if(l1==nullptr && l2==nullptr) return nullptr;
-
-  // At least one is not nullptr. Convert both to integers.
-  int n1 = list_to_int(l1);
-  int n2 = list_to_int(l2);
-
-  // Add the numbers
-  int res = n1+n2;
-
-  return int_to_list(res);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -175,68 +116,6 @@ ListNode* sum_convert_int(ListNode* l1, ListNode* l2)
 // By iterating through both linked lists.
 ListNode* sum_iter(ListNode* l1, ListNode* l2)
 {
-  // Edge case, if both l1 and l2 are nullptr, we simply return a nullptr
-  if(l1==nullptr && l2==nullptr) return nullptr;
-  
-  // I have decided to create a new linked list. I *could* use one of the
-  // inputs as the output, but I cba.
-  // Again, here we need a dummy_head, so we can return dummy_head->next, 
-  // this is because when we're attaching a linked list, we go along it, 
-  // losing track of the head.
-  std::unique_ptr<ListNode> dummy = std::make_unique<ListNode>(0);
-  // we use this to go along the linked list
-  ListNode* node = dummy.get();
-
-  // The carry-over
-  int carry = 0; // initially there is no carry.
-
-  while(l1 && l2)
-  {
-    // calculate the sum
-    int sum = l1->data + l2->data + carry;
-
-    // sum may be double digits, the maximum would be 9+9+1 (1 being the 
-    // carry), which is 19. First we extract the 9 and put it in this place
-    // value:
-
-    // The modulo 10 of the sum to get the digit in the current place value.
-    node->next = new ListNode{sum%10};
-
-    // Now we calculate the next carry, if sum is over or equal to 10, it's
-    // 1, otherwise it's 0. We can do this:
-    carry = sum/10;
-
-    // Now we move l1, l2 and node
-    l1 = l1->next;
-    l2 = l2->next;
-    node = node->next;
-  }
-
-  // When we get out here, it means either one or both of l1 and l2 are 
-  // nullptr. We find out which one and store it in l1.
-  l1 = (l1==nullptr) ? l2:l1;
-
-  // Carry may still be 1, and if the value (data) in l1 is 9, we'll have a 
-  // sum of 10, and thus we'll have a carry of 1 again, thus we need to keep
-  // the carry.
-  while(l1)
-  {
-    int sum = l1->data + carry;
-
-    node->next = new ListNode{sum%10};
-    carry = sum/10;
-
-    l1 = l1->next;
-    node = node->next;
-  }
-
-  // if we still have a carry left over, we put it on at the end.
-  if(carry)
-  {
-    node->next = new ListNode{carry};
-  }
-  
-  return dummy->next;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -251,162 +130,17 @@ ListNode* sum_recur_helper(ListNode* l1, int carry);
 
 ListNode* sum_recur(ListNode* l1, ListNode* l2)
 {
-  // Check if both are null
-  if(l1==nullptr && l2==nullptr) return nullptr;
-
-  // Now, at least one is not null, we call the recursive function with a
-  // carry of 0.
-  return sum_recur_helper(l1,l2,0);
-}
-
-ListNode* sum_recur_helper(ListNode* l1, ListNode* l2, int carry)
-{
-  // Base case: check if both l1 and l2 are nullptr
-  if(l1==nullptr && l2==nullptr)
-  {
-    // if the carry is 0, return a nullptr, otherwise, return a new node
-    // with value (data) of carry (which will be 1)
-    if(carry)
-    {
-      return new ListNode{carry};
-    }
-    else
-    {
-      return nullptr;
-    }
-  }
-
-  // Now, at least one of l1 or l2 (or both) is not null,
-  if(l1 != nullptr && l2 != nullptr)
-  {
-    // Calculate the sum and carry of this value place.
-    int sum = l1->data + l2->data + carry;
-    
-    // new carry is sum/10 (since we want the next value place up)
-    int new_carry = sum/10;
-
-    ListNode* next_node = sum_recur_helper(l1->next, l2->next,new_carry);
-
-    // Create new node for this place value.
-    ListNode* node = new ListNode{sum%10};
-    node->next = next_node;
-
-    return node;
-  }
-  // Otherwise, only one of them is null, so we call the one list function.
-  else
-  {
-    // find out which one is not null.
-    l1 = (l1==nullptr) ? l2:l1;
-
-    // Work out the sum and new carry.
-    int sum = l1->data + carry;
-    int new_carry = sum/10;
-
-    ListNode* next_node = sum_recur_helper(l1->next, new_carry);
-
-    // Create node for this value place
-    ListNode* node = new ListNode{sum%10};
-    node->next = next_node;
-
-    return node;
-  }
-
-  // Should not get here.
-  return nullptr;
 }
 
 // helper for a single list
 ListNode* sum_recur_helper(ListNode* l, int carry)
 {
-  // Base case: l == nullptr
-  if(l==nullptr)
-  {
-    // If there a carry to add on at the end?
-    if(carry)
-    {
-      return new ListNode{carry};
-    }
-    else
-    {
-      return nullptr;
-    }
-  }
-
-  // l is not null, so we recurse:
-  int sum = l->data + carry;
-  int new_carry = sum/10;
-
-  ListNode* next_node = sum_recur_helper(l->next,new_carry);
-
-  // Create node for this value place, set the data and next node.
-  ListNode* node = new ListNode{sum%10};
-  node->next = next_node;
-
-  return node;
 }
 
 ////////////////////////////////////////////////////////////////////////////
 // Reverse a linked list iteratively.
 ListNode* reverse(ListNode* l)
 {
-  // First check for nullptr, if this is nullptr, we just return it.
-  if(l==nullptr) return l;
-
-  // Now we know that l has at least one node. This is how the algorithm 
-  // works: suppose we're at a node "curr", that is, we're processing 
-  // "curr". Thus we have the following structure:
-  // 
-  // <-prev curr-> next
-  // 
-  // note that prev has already been processed, so it points to it's 
-  // previous node.
-  //
-  // We need to do two things:
-  // 1) point curr to prev, then
-  // 2) advance curr by curr = curr->next.
-  //
-  // This means we have to store prev as current: prev = current.
-  // Also, after the relink in step 1, curr->next does not point to it's 
-  // next, but rather, the previous. Thus we must store the next node in
-  // order to iterate through the list. So we need to keep track of three
-  // pointers:
-  // a) prev: we point curr to this.
-  // b) curr: the current pointer we're processing.
-  // c) next: cache this to iterate through the list. Since after the 
-  //          relink, curr->next points to prev, so we cannot do the usual
-  //          curr = curr->next to advance it.
-
-  
-  ListNode* prev = nullptr; // we point curr to this.
-  ListNode* curr = l; //we can just use l if we want, but curr sounds better
-
-  // To reverse a linked list, we iterate through, linking curr->next to 
-  // prev.
-  while(curr)
-  {
-    // Store the next node so we can iterate through the linked list, since
-    // after the relink, we've list the next node, so we cannot advance by
-    // doing curr = curr->next
-    ListNode* next = curr->next;
-
-    // Perform the relink
-    curr->next = prev;
-
-    // iterate through by advancing both the prev and current nodes.
-    prev = curr;
-    curr = next;
-  }
-
-  // After the while loop, curr is null, which means the prev node did point
-  // to it, the prev node was the last node in the original linked list:
-  // N1->N2->...->prev->curr
-  //                     ^ nullptr
-  // After the loop, prev is now the head, see here:
-  // N1<-N2<-...<-prev
-  //
-  // So we just return prev.
-  return prev;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -417,9 +151,6 @@ ListNode* reverse(ListNode* l)
 // =9->1->2   =912
 ListNode* sum_reverse(ListNode* l1, ListNode* l2)
 {
-  // reverse both lists, sum them using functions above, then reverse again
-  // to get back the original reversed value placements
-  return reverse(sum_iter(reverse(l1),reverse(l2)));
 }
 
 ////////////////////////////////////////////////////////////////////////////
