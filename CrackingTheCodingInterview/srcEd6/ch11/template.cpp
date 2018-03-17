@@ -1,7 +1,9 @@
 /*
  * =========================================================================
  * Copyright (c) 2018, Raymon White - All Rights Reserved
- * Author:  Raymon White (ray), rayaxiom42 AT gmail DOT com
+ * Author:  Raymon White (ray), https://ray42.com
+ * Contact: rayaxiom42 AT gmail DOT com
+ * License: GNU AGPLv3
  * =========================================================================
  */
 
