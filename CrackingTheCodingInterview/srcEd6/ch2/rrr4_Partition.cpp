@@ -63,16 +63,17 @@ ListNode* partition(ListNode* head, int x)
   if(head == nullptr) return head;
 
   // I will have two dummy head, this will be used to connect the two lists
-  // at the end.
-  ListNode* left_dummy = new ListNode{0};
-  ListNode* right_dummy = new ListNode{0};
+  // at the end. Using unique_ptr for these so that they will be 
+  // automatically deleted once we return left_dummy->next
+  std::unique_ptr<ListNode> left_dummy= std::make_unique<ListNode>(0);
+  std::unique_ptr<ListNode> right_dummy= std::make_unique<ListNode>(0);
 
   // We need two more pointers which does the actual work, pointing to the
   // current node in the two linked lists. We point it to the dummy nodes
   // initially, since we need to add to them, which means to modify the next
   // pointer of the previous node.
-  ListNode* left_node = left_dummy;   // used for return
-  ListNode* right_node = right_dummy; // used for attaching 
+  ListNode* left_node = left_dummy.get();   // used for return
+  ListNode* right_node = right_dummy.get(); // used for attaching 
 
   // Now loop through the nodes of head, if it's less than x, attach it
   // to left_node, if it's equal to or greater than head, attach it to 

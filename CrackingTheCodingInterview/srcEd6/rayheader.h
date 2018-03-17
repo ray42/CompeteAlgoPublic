@@ -27,6 +27,8 @@ void printCont(Cont c, const std::string& str = "")
   std::cout << '\n';
 }
 
+template<typename T>
+auto print_cont = printCont<T>;
 
 // Linked list stuff.
 ////////////////////////////////////////////////////////////////////////////
@@ -52,6 +54,7 @@ ListNode* buildSinglyLinkedList(const std::vector<int>& v)
   }
   return dummy.next;
 }
+auto vec_to_slist = buildSinglyLinkedList;
 
 std::vector<int> convertSinglyLinkedListToVec(ListNode* n)
 {
@@ -67,6 +70,12 @@ std::vector<int> convertSinglyLinkedListToVec(ListNode* n)
   }
   return ret;
 }
+// Alias convertSinglyLinkedListToVec to slist_to_vec
+//template <typename... Args>
+//auto slist_to_vec(Args&&... args) -> decltype(f(std::forward<Args>(args)...)) {
+//  return f(std::forward<Args>(args)...);
+//}
+auto slist_to_vec = convertSinglyLinkedListToVec;
 
 void printListNode(ListNode* n, const std::string& str="")
 {
@@ -81,6 +90,7 @@ void printListNode(ListNode* n, const std::string& str="")
   }
   std::cout << '\n';
 }
+auto print_list = printListNode;
 
 // Stack and Queues
 ////////////////////////////////////////////////////////////////////////////
@@ -88,8 +98,9 @@ void printListNode(ListNode* n, const std::string& str="")
 ////////////////////////////////////////////////////////////////////////////
 
 template<typename T, 
-         typename Container = std::deque<T> >class MyStack;
-
+         typename Container = std::deque<T>
+        >
+class MyStack;
 
 // Stack helpers
 ////////////////////////////////////////////////////////////////////////////
@@ -110,13 +121,12 @@ void printStack(const T& s, const std::string& str="")
   std::cout << '\n';
 }
 
-
-
 // MyStack class
 // /////////////////////////////////////////////////////////////////////////
 template<typename T, 
          typename Container
->class MyStack{
+        >
+class MyStack{
 
 // Friend functions
 template<typename U> friend void printStack(const U&, const std::string&);
@@ -187,6 +197,8 @@ MyStack<int> buildStack(const std::vector<int>& v)
   }
   return mystack;
 }
+auto vec_to_stack = buildStack;
+
 std::vector<int> convertStackToVec(const MyStack<int>& mystack)
 {
   std::vector<int> ret;
@@ -196,6 +208,7 @@ std::vector<int> convertStackToVec(const MyStack<int>& mystack)
   }
   return ret;
 }
+auto stack_to_vec = convertStackToVec;
 
 
 // Nodes, Trees and Graphs
@@ -209,8 +222,7 @@ class GenNode{
 public:
   GenNode(T d=T{}, int nchild=0, const std::string& s=""):
     data_{d},children_{std::vector<GenNode*>(nchild,nullptr)},name_{s}
-  {
-  }
+  {}
 
   virtual ~GenNode(){};
 
