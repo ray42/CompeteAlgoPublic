@@ -425,7 +425,8 @@ bool is_palindrome_stack_two_point(ListNode* l)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-// recursive - I'll read the solution.
+// recursive - I'll read the solution - not done, this is very long.
+// Come back to it later. RRR
 bool is_palindrome_recur(ListNode* l)
 {
 
