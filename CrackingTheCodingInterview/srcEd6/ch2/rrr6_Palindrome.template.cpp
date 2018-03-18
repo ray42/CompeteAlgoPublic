@@ -101,61 +101,15 @@ bool is_equal(ListNode*, ListNode*);
 // uses the two functions above
 bool is_palindrome_reverse(ListNode* l)
 {
-  ListNode* rev_list = reverse_copy(l);
-  return is_equal(l,rev_list);
 }
 
 ListNode* reverse_copy(ListNode* l)
 {
-  // check for null
-  if(l==nullptr) return l;
-
-  // Recall in rrr5_SumLists.cpp that to reverse a linked list, we need to
-  // point curr to prev, then iterate through the linked list by 
-  // curr = curr->next, but since we've changed curr->next, we must cache 
-  // curr->next.
-  // 
-  // However, in this case we don't need to cache curr->next, since 
-  // curr->next is never modified. We create a copy of curr!
-  ListNode* prev_copy = nullptr;
-  ListNode* curr = l;
-  while(curr!=nullptr)
-  {
-    // create a copy of the current node, then point it to the previous copy
-    // node.
-    ListNode* curr_copy = new ListNode{curr->data};
-    
-    // Do the reverse using the copy.
-    curr_copy->next = prev_copy;
-
-    // move along the input list, and set the copy curr to the previous copy
-    curr = curr->next;
-    prev_copy = curr_copy;
-  }
-
-  // when loop ends, prev_copy points to the last element added to the 
-  // (copied) reversed list, and curr is nullptr.
-  return prev_copy;
 }
 
 // Return if two linked lists are equal
 bool is_equal(ListNode* l1, ListNode* l2)
 {
-  // At least one of these is not nullptr. Let's assume that both are not 
-  // nullptr, then we simply loop until one of them is nullptr
-  while(l1 != nullptr && l2 != nullptr)
-  {
-    if(l1->data != l2->data)
-      return false;
-
-    // advance heads
-    l1 = l1->next;
-    l2 = l2->next;
-  }
-
-  // If we get here, then either l1 is nullptr, l2 is nullptr, or both.
-  // If both are nullptr, then the two lists are equal.
-  return l1==nullptr && l2==nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -168,72 +122,14 @@ bool is_xnums_equal(ListNode*, ListNode*, int); // not unit tested, cba.
 
 bool is_palindrome_reverse_opt(ListNode* l)
 {
-  int lsize = 0;
-  ListNode* rev_list = reverse_copy(l,lsize);
-
-  return is_xnums_equal(l, rev_list, lsize/2);
 }
 
 ListNode* reverse_copy(ListNode* l, int& x)
 {
-  // Initially, the size is zero
-  x = 0;
-  if(l == nullptr) return l;
-
-  ListNode* prev_copy = nullptr;
-  ListNode* curr = l;
-  while(curr)
-  {
-    // copy
-    ListNode* curr_copy = new ListNode{curr->data};
-
-    // link
-    curr_copy->next = prev_copy;
-    ++x;
-    
-    // advance through both lists.
-    prev_copy = curr_copy;
-    curr = curr->next;
-  }
-  return prev_copy;
 }
 
 bool is_xnums_equal(ListNode* l1, ListNode* l2, int x)
 {
-  // NOTE: Since we are only comparing half the list, there is an additional
-  // edge case which we did not consider in the first attempt. If x = 0, it 
-  // means there is only 1 element in the list, since 1/2 = 0 (in ints).
-  // Thus, we check for this and return if the two data is equal.
-  if(x==0 && l1!= nullptr && l2!=nullptr)
-  {
-    return l1->data == l2->data;
-  }
-
-  while(l1 != nullptr && l2 != nullptr && x > 0)
-  {
-    --x;
-    if(l1->data != l2->data)
-      return false;
-
-    // advance pointers
-    l1 = l1->next;
-    l2 = l2->next;
-  }
-
-  // This part also changed. Since we've compared only x number of elements,
-  // where l1 or l2 could have finished before x reaches zero then we have 
-  // the following scenario:
-  //
-  // if x==0, then we have compared x numbers of nodes from l1 and l2, they
-  // are equal:
-  if(x==0) 
-  {
-    return true;
-  }
-
-  // Otherwise, if x != 0, it then either l1 or l2 finished before the
-  // other, so they are not equal.
-  return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -243,71 +139,6 @@ int get_size(ListNode* l);
 
 bool is_palindrome_stack_known_size(ListNode* l)
 {
-  // get the size
-  int lsize = get_size(l);
-
-  // edge case: check for size 0 (nullptr) and size 1, both should return
-  // true.
-  if(lsize == 0 || lsize ==1) 
-    return true;
-
-  // We're going to put half of the elements in a stack, then pop it out
-  // whilst comparing with the second half. Thus we need half the size.
-  // Note that if lsize is odd, then this is rounded down, i.e. it does not
-  // take into account the middle element, thus we will need to remember to 
-  // skip over the middle element if it is odd.
-  int halflsize = lsize/2;
-
-  // working pointer to iterate through the list.
-  ListNode* curr = l;
-  // we don't need to test for curr, but it's just good practice. We don't
-  // need to test for curr because it's guaranteed that halflsize <= lsize.
-  // so halflsize will get to 0 before curr gets to nullptr.
-  std::stack<decltype(curr->data)> left_half_stack;
-  while(curr && halflsize > 0)
-  {
-    // insert into back of stack
-    left_half_stack.push(curr->data);
-
-    // advance pointer and decrement the count.
-    curr = curr->next;
-    --halflsize;
-  }
-
-  // If there is an odd number of nodes, we skip the middle.
-//  if(lsize & 1) // if it's off. This works since we're AND-ing with 1! :)
-//    curr = curr->next;
-  // More fancy way:
-  curr = (lsize&1)? curr->next : curr;
-
-  // Now iterate through the rest of the nodes, comparing with what's popped
-  while(!left_half_stack.empty() && curr != nullptr)
-  {
-    // get the value and pop
-    auto left_data = left_half_stack.top();
-    left_half_stack.pop();
-
-    // Now  compare the datas
-    if(left_data != curr->data)
-      return false;
-
-    // advance the curr pointer.
-    curr = curr->next;
-  }
-
-  // if we get here, everything is okay!
-  return true;
-}
-
-int get_size(ListNode* l)
-{
-  int lsize = 0;
-  while(l)
-  {
-    ++lsize;
-    l = l->next;
-  }
-  return lsize;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -316,109 +147,6 @@ int get_size(ListNode* l)
 // technique.
 bool is_palindrome_stack_two_point(ListNode* l)
 {
-  // Check for nullptr or one node (if there is only one node, then l->next)
-  // is nullptr
-  if(l==nullptr || l->next == nullptr)
-    return true;
-
-  // Now there are at least two nodes. I'll illustrate the runner technique:
-  // we have two pointers, slow (S) and fast (F). The fast moves two times 
-  // as fast as the slow one:
-  // F
-  // S
-  // 1->2->3->4->5->null
-  //
-  //       F
-  //    S
-  // 1->2->3->4->5->null
-  //
-  //             F
-  //       S
-  // 1->2->3->4->5->null
-  //
-  // To make F move twice as fast S, for each S = S->next, we do 
-  // F = F->next->next, thus we must check that F and F-next is not null, 
-  // but F->next->next *can* be null.
-  //
-  // At this point, we have added 1 and 2 to the stack, and we need to skip
-  // 3 without adding it to the queue, and then compare 4 and 5 with the 
-  // popped stack values.
-  //
-  // Let's see how it works with an even number of nodes:
-  // F
-  // S
-  // 1->2->3->4->5->6->null
-  // 
-  //       F
-  //    S
-  // 1->2->3->4->5->6->null
-  //
-  //             F
-  //       S
-  // 1->2->3->4->5->6->null
-  //
-  //                   F
-  //          S
-  // 1->2->3->4->5->6->null
-  //
-  // So again, we have pushed the left half into the stack, but we do NOT 
-  // skip over the element S is pointing to. But how do we know if do we 
-  // need to skip or not? Looking at:
-  //
-  // odd:
-  //             F
-  //       S
-  // 1->2->3->4->5->null - stack has odd number of elements
-  //
-  // even:
-  //                   F
-  //          S
-  // 1->2->3->4->5->6->null - stack has even number of elements
-  //
-  // So we can either check the size of the stack, or, notice that since F
-  // starts at 1, and keeps advancing by 2, it will always land on an odd 
-  // numbered node. Thus, if there is an EVEN number of element, F must be
-  // null. If there is an odd number of elements, F will point to the last
-  // element. Thus, if F!=nullptr, we know that there is an odd number of 
-  // elements (since it's pointing to the last odd numbered element, the 
-  // nullptr would be where the next even element is.)
-
-  ListNode* slow = l;
-  ListNode* fast = l;
-
-  // Now loop through, remember that for us to be able to do 
-  // fast = fast->next->next, we need both fast and fast->next to be not
-  // null.
-  std::stack<decltype(l->data)> left_half_stack;
-  while(fast && fast->next)
-  {
-    left_half_stack.push(slow->data);
-
-    slow = slow->next;
-    fast = fast->next->next;
-  }
-
-  // If there is an odd number of nodes, we skip the middle node.
-  // If there is an odd number of nodes, then fast would be pointing to the 
-  // last odd node, i.e. it is not nullptr
-  if(fast != nullptr)
-  {
-    slow = slow->next;
-  }
-
-  // Now iterate through the rest of the list and compare
-  while(slow)
-  {
-    auto data = left_half_stack.top();
-    left_half_stack.pop();
-    if(slow->data != data)
-      return false;
-
-    // advance pointer
-    slow = slow->next;
-  }
-
-  return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////
