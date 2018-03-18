@@ -908,25 +908,27 @@ TEST_CASE("Testing ", "[]" )
     ListNode* a1 = reverse(l1);
     REQUIRE(a1==nullptr);
 
-    // test one node
+    // test one node, so the head and tail are the same node.
     ListNode* l2 = vec_to_slist({3});
     ListNode* a2 = reverse(l2);
     std::vector<int> v2{3};
     REQUIRE(slist_to_vec(a2)==v2);
 
-    // test two nodes
+    // test two nodes - head and tail are separate nodes, but no elements
+    // in between
     ListNode* l3 = vec_to_slist({2,3});
     ListNode* a3 = reverse(l3);
     std::vector<int> v3{3,2};
     REQUIRE(slist_to_vec(a3)==v3);
 
-    // test three nodes
+    // test three nodes - head and tail are separate nodes, with one element
+    // in betwen
     ListNode* l4 = vec_to_slist({2,3,4});
     ListNode* a4 = reverse(l4);
     std::vector<int> v4{4,3,2};
     REQUIRE(slist_to_vec(a4)==v4);
 
-    // test many nodes
+    // test many nodes.
     ListNode* l5 = vec_to_slist({2,3,4,5,6});
     ListNode* a5 = reverse(l5);
     std::vector<int> v5{6,5,4,3,2};
