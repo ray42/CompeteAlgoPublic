@@ -68,50 +68,6 @@ static bool RAYDEBUG=false;
 // NOTE: Read my notes for how this works. I cba to explain it here.
 ListNode* find_beginning(ListNode* head)
 {
-  if(head==nullptr) return nullptr;
-
-  // Find out if contains a cycle.
-  ListNode* slow = head;
-  ListNode* fast = head;
-  
-  while(fast && fast->next)
-  {
-    // we need to advance first, since if we do the checking first, it will
-    // always be equal on the first iteration.
-    fast = fast->next->next;
-    slow = slow->next;
-
-    // check for equality
-    if(slow == fast)
-    {
-      break;
-    }
-
-
-  }
-
-  // if a cycle is not detected, return nullptr
-  if(slow != fast)
-    return nullptr;
-
-  // Now we know that slow == first, so we place slow back at the head,
-  // and walk through, returning the first node which are equal
-  slow = head;
-  while(slow && fast)
-  {
-    // Here, we do the opposite, we check first. This is because the head
-    // of the linked list and the meeting point (determined by the first
-    // while loop) might be the same node, i.e. a fully cyclic list.
-    if(slow == fast)
-      return slow;
-
-    slow = slow->next;
-    fast = fast->next;
-  }
-
-  // for what ever reason, if we get here, we just return nullptr to 
-  // indicate failure.
-  return nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////
