@@ -9,8 +9,8 @@
 # Unignore all dirs
 !*/
 *Makefile*
-!LISCENSE
-!GCCFLAGS
+!LISCENSE.ray
+!GCCFLAGS.ray
 
 ### Above combination will ignore all files without extension ###
 
